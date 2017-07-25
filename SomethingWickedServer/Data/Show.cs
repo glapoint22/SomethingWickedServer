@@ -2,10 +2,8 @@
 {
     public class Show
     {
-        public string date;
-        public string time;
-        public string venue;
-        public string location;
-        public string url;
+        public string date { get; set; }
+        public string time { get; set; }
+        public Venue venue { get; set; }
     }
 }

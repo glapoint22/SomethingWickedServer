@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using SomethingWickedServer.Models;
 
-namespace SomethingWickedServer.Controllers
+namespace SomethingWickedServer
 {
     [Produces("application/json")]
     [Route("api/Data")]
@@ -83,9 +83,12 @@ namespace SomethingWickedServer.Controllers
                 {
                     date = x.DateTime.ToString("MMMM dd"),
                     time = x.DateTime.ToString("h tt") + " - " + x.DateTime.AddHours(x.Duration).ToString("h tt"),
-                    venue = x.Venue.Name,
-                    location = x.Venue.Location,
-                    url = x.Venue.Url
+                    venue = new Venue
+                    {
+                        name = x.Venue.Name,
+                        location = x.Venue.Location,
+                        url = x.Venue.Url
+                    }
                 })
                 .AsNoTracking()
                 .ToListAsync();

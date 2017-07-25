@@ -14,11 +14,11 @@ namespace SomethingWickedServer
             this.members = members;
         }
 
-        public List<ShowcaseImage> showcaseImages;
-        public List<Show> shows;
-        public List<Song> songs;
-        public List<MediaGroup> videoGroups;
-        public List<MediaGroup> photoGroups;
-        public List<Member> members;
+        public List<ShowcaseImage> showcaseImages { get; set; }
+        public List<Show> shows { get; set; }
+        public List<Song> songs { get; set; }
+        public List<MediaGroup> videoGroups { get; set; }
+        public List<MediaGroup> photoGroups { get; set; }
+        public List<Member> members { get; set; }
     }
 }
