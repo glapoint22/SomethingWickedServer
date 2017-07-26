@@ -33,13 +33,14 @@ namespace SomethingWickedServer
 
             //Songs
             List<Song> songs = await db.Songs.Include(s => s.Genre)
+                .OrderBy(s => s.Song)
                 .Select(s => new Song
                 {
                     name = s.Song,
                     genre = s.Genre.Genre,
                     artist = s.Artist,
                     videoGroup = s.VideoGroup,
-                    videoID = s.VideoId
+                    videoID = s.VideoId == null ? "z" : s.VideoId
                 })
                 .AsNoTracking()
                 .ToListAsync();
