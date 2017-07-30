@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using SomethingWickedServer.Models;
+using Newtonsoft.Json;
 
 namespace SomethingWickedServer
 {
@@ -13,7 +14,6 @@ namespace SomethingWickedServer
     public class DataController : Controller
     {
         private Something_WickedContext db;
-
         public DataController(Something_WickedContext dbContext)
         {
             db = dbContext;
@@ -45,27 +45,31 @@ namespace SomethingWickedServer
                 .AsNoTracking()
                 .ToListAsync();
 
+            //Facebook
+            string content = await Facebook.GetContent("me", "", "video_lists{title,thumbnail},albums{name,type,picture}");
+            FacebookData facebookData = JsonConvert.DeserializeObject<FacebookData>(content);
+
             //Video Groups
-            List<MediaGroup> videoGroups = await db.VideoGroups.OrderByDescending(v => v.Date)
-            .Select(v => new MediaGroup
-            {
-                id = v.Id,
-                title = v.Title,
-                thumbnail = v.Thumbnail
-            })
-            .AsNoTracking()
-            .ToListAsync();
+            List<MediaGroup> videoGroups = facebookData.video_lists.data
+                .Select(v => new MediaGroup
+                {
+                    id = v.id,
+                    title = v.title,
+                    thumbnail = v.thumbnail
+                })
+                .ToList();
 
             //Photo Groups
-            List<MediaGroup> photoGroups = await db.Photos.OrderByDescending(i => i.Id)
+            List<MediaGroup> photoGroups = facebookData.albums.data
+                .Where(p => p.type == "normal")
                 .Select(p => new MediaGroup
                 {
-                    id = p.Id,
-                    title = p.Title,
-                    thumbnail = p.Thumbnail
+                    id = p.id,
+                    title = p.name,
+                    thumbnail = p.picture.data.url
                 })
-            .AsNoTracking()
-            .ToListAsync();
+                .ToList();
+
 
             //Members
             List<Member> members = await db.Members
@@ -93,6 +97,7 @@ namespace SomethingWickedServer
                 })
                 .AsNoTracking()
                 .ToListAsync();
+            
 
             return new Data(showcaseImages, shows, songs, videoGroups, photoGroups, members);
         }
