@@ -1,5 +1,6 @@
 ﻿using System.Net.Http;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace SomethingWickedServer
 {
@@ -8,11 +9,11 @@ namespace SomethingWickedServer
         private static string accessToken = "EAACYLTuTmpkBAPyt94AWJslw1zHKi9T0M7dRNFD9AYFmZAw7j9ZBteocetAkS2fS1vQdfVpY7PWjIr30xf0xxel1mSXlOVjdIYccsPKrO8h6P8t7Nle9cJ3VE8xRLoTX7mDJcduldshoRgltbDBA1E9q50RacuzFRREcmmtAZDZD";
         private static string graphApiUrl = "https://graph.facebook.com/v2.10/";
 
-        public static async Task<string> GetContent(string node, string edge, string fields)
+        public static async Task<string> GetContent(string node, string fields)
         {
             using (HttpClient client = new HttpClient())
             {
-                using (HttpResponseMessage response = await client.GetAsync(graphApiUrl + node + "/" + edge + "?fields=" + fields + "&access_token=" + accessToken))
+                using (HttpResponseMessage response = await client.GetAsync(graphApiUrl + node + "/" + "?fields=" + fields + "&access_token=" + accessToken))
                 {
                     using (HttpContent content = response.Content)
                     {
@@ -64,4 +65,18 @@ public struct VideoListData
     public string title;
     public string thumbnail;
     public string id;
+}
+
+
+
+public struct Content
+{
+    public string title { get; set; }
+    public ContentData[] data { get; set; }
+}
+
+public struct ContentData
+{
+    public string id { get; set; }
+    public string url { get; set; }
 }

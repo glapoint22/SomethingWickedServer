@@ -46,7 +46,7 @@ namespace SomethingWickedServer
                 .ToListAsync();
 
             //Facebook
-            string content = await Facebook.GetContent("me", "", "video_lists{title,thumbnail},albums{name,type,picture}");
+            string content = await Facebook.GetContent("me", "video_lists{title,thumbnail},albums{name,type,picture}");
             FacebookData facebookData = JsonConvert.DeserializeObject<FacebookData>(content);
 
             //Video Groups
@@ -87,7 +87,7 @@ namespace SomethingWickedServer
                 .Select(x => new Show
                 {
                     date = x.DateTime.ToString("MMMM dd"),
-                    time = x.DateTime.ToString("h tt") + " - " + x.DateTime.AddHours(x.Duration).ToString("h tt"),
+                    time = x.DateTime.ToString("h:mm tt") + " - " + x.DateTime.AddHours(x.Duration).ToString("h:mm tt"),
                     venue = new Venue
                     {
                         name = x.Venue.Name,
