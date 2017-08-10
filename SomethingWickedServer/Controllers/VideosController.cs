@@ -9,23 +9,30 @@ namespace SomethingWickedServer.Controllers
     [Route("api/videos/{id}")]
     public class VideosController : Controller
     {
-        public async Task<Content> Get(string id)
+        public async Task<IActionResult> Get(string id)
         {
             string content = await Facebook.GetContent(id, "title,videos{id}");
             JObject jObject = JObject.Parse(content);
 
-            return new Content
+            var facebookContent = new
             {
                 title = (string)jObject.SelectToken("title"),
                 data = jObject.SelectToken("videos.data")
-                    .Select(a => new ContentData
+                    .Select(a => new
                     {
                         id = (string)a["id"],
-                        url = null
+                        content = ""
                     }
                     )
                     .ToArray()
             };
+
+            if (facebookContent == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(facebookContent);
 
         }
     }

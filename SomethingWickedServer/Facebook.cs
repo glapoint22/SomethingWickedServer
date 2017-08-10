@@ -66,17 +66,3 @@ public struct VideoListData
     public string thumbnail;
     public string id;
 }
-
-
-
-public struct Content
-{
-    public string title { get; set; }
-    public ContentData[] data { get; set; }
-}
-
-public struct ContentData
-{
-    public string id { get; set; }
-    public string url { get; set; }
-}
