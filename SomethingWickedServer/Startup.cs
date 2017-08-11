@@ -29,8 +29,6 @@ namespace SomethingWickedServer
             services.AddMvc();
             services.AddSingleton<Something_WickedContext>();
             services.AddDbContext<Something_WickedContext>(options => options.UseSqlServer(Configuration.GetConnectionString("SomethingWickedDB")));
-
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -39,6 +37,8 @@ namespace SomethingWickedServer
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
             app.UseMvc();
         }
     }
